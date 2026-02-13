@@ -26,6 +26,13 @@ NULL
 #' @param draw wheather or not to draw the .pdf or .html visualization 
 #'        <c(NULL, "PDF", "HTML")>
 #' @return \code{MetaVolcano} object
+#' @param colors vector of colors for the plot c(down, neutral, up)
+#' @param point_size size of points in the plot
+#' @param label_genes character vector of specific genes to label
+#' @param label_top_n number of top genes to label automatically
+#' @param label_size size of gene name labels
+#' @param plot_title custom plot title
+#' @param show_legend whether to show the legend
 #' @keywords write 'combining meta-analysis' metavolcano
 #' @export
 #' @examples
@@ -36,7 +43,14 @@ combining_mv <- function(diffexp=list(), pcriteria="pvalue",
 			 foldchangecol="Log2FC", genenamecol="Symbol", 
 			 geneidcol=NULL, metafc="Mean", metathr=0.01, 
 			 collaps="FALSE", jobname="MetaVolcano", 
-			 outputfolder=".", draw="HTML") {
+			 outputfolder = tempdir(), draw="HTML",
+			 colors = c("#377EB8", "grey", "#E41A1C"),
+			 point_size = 0.5,
+			 label_genes = NULL,
+			 label_top_n = NULL,
+			 label_size = 3,
+			 plot_title = NULL,
+			 show_legend = FALSE) {
     	
     if(!draw %in% c('PDF', 'HTML')) {
 		
@@ -158,7 +172,11 @@ combining_mv <- function(diffexp=list(), pcriteria="pvalue",
     dplyr::arrange(-abs(idx))
 
     # --- Drawing combining MetaVolcano
-    gg <- plot_mv(meta_diffexp, NULL, genecol, TRUE, metafc)
+    gg <- plot_mv(meta_diffexp, NULL, genecol, TRUE, metafc,
+                 colors = colors, point_size = point_size,
+                 label_genes = label_genes, label_top_n = label_top_n,
+                 label_size = label_size, plot_title = plot_title,
+                 show_legend = show_legend)
     
     if(draw == "HTML") {
 

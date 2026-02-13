@@ -4,9 +4,23 @@
 \alias{draw_forest}
 \title{A function to draw a forest plot from the REM MetaVolcano result}
 \usage{
-draw_forest(remres, gene = "MMP9", genecol = "Symbol",
-  foldchangecol = "Log2FC", llcol = "CI.L", rlcol = "CI.R",
-  jobname = "MetaVolcano", outputfolder = ".", draw = "PDF")
+draw_forest(
+  remres,
+  gene = "MMP9",
+  genecol = "Symbol",
+  foldchangecol = "Log2FC",
+  llcol = "CI.L",
+  rlcol = "CI.R",
+  jobname = "MetaVolcano",
+  outputfolder = tempdir(),
+  draw = "PDF",
+  colors = c(positive = "#E41A1C", negative = "#377EB8", neutral = "#bdbdbd", reference =
+    "#969696"),
+  point_size = 2,
+  plot_width = 4,
+  plot_height = 5,
+  plot_title = NULL
+)
 }
 \arguments{
 \item{remres}{MetaVolcano object. Output of the rem_mv() function
@@ -30,6 +44,16 @@ name <string>}
 
 \item{draw}{either 'PDF' or 'HTML' to save metaolcano as .pdf or .html
 respectively <string>}
+
+\item{colors}{named vector of colors: c(positive, negative, neutral)}
+
+\item{point_size}{size of the points}
+
+\item{plot_width}{width of saved plot (inches for PDF, pixels for HTML)}
+
+\item{plot_height}{height of saved plot (inches for PDF, pixels for HTML)}
+
+\item{plot_title}{custom plot title (defaults to gene name)}
 }
 \value{
 \code{ggplot2} object

@@ -26,6 +26,13 @@ NULL
 #' @param outputfolder /path where to write the results/
 #' @param draw wheather or not to draw a .pdf or .html visualization 
 #'        <c(NULL, 'PDF', 'HTML')>
+#' @param colors vector of colors for the plot c(down, neutral, up)
+#' @param point_size size of points in the plot
+#' @param label_genes character vector of specific genes to label
+#' @param label_top_n number of top genes to label automatically
+#' @param label_size size of gene name labels
+#' @param plot_title custom plot title
+#' @param show_legend whether to show the legend
 #' @keywords write 'vote-counting meta-analysis' metavolcano
 #' @return MetaVolcano object
 #' @export
@@ -37,8 +44,15 @@ votecount_mv <- function(diffexp=list(), pcriteria="pvalue",
 			      foldchangecol="Log2FC", genenamecol="Symbol", 
 			      geneidcol=NULL, pvalue=0.05, foldchange=0, 
 			      metathr=0.01, collaps=FALSE, 
-			      jobname="MetaVolcano", outputfolder=".", 
-			      draw="HTML") {
+			      jobname="MetaVolcano", outputfolder = tempdir(), 
+			      draw="HTML",
+			      colors = c("#377EB8", "grey", "#E41A1C"),
+			      point_size = 0.5,
+			      label_genes = NULL,
+			      label_top_n = NULL,
+			      label_size = 3,
+			      plot_title = NULL,
+			      show_legend = FALSE) {
 
     if(!draw %in% c('PDF', 'HTML')) {
 		
@@ -143,7 +157,11 @@ votecount_mv <- function(diffexp=list(), pcriteria="pvalue",
     gg <- draw_degbar(bardat)
     ff <- draw_cum_freq(meta_diffexp, nstud)
     gf <- plot_grid(gg, ff, align="h")
-    mv <- plot_mv(meta_diffexp, nstud, genecol, FALSE, NULL)
+    mv <- plot_mv(meta_diffexp, nstud, genecol, FALSE, NULL,
+                     colors = colors, point_size = point_size,
+                     label_genes = label_genes, label_top_n = label_top_n,
+                     label_size = label_size, plot_title = plot_title,
+                     show_legend = show_legend)
 
     if(draw == "HTML") {
         
