@@ -150,5 +150,5 @@ GPL-3
 
 ---
 
-**Contributors:** Izabela Mamede Cesar Prada, Diogenes Lima, Helder Nakaya  
-**Maintainer:** Izabela Mamede (iza.mamede@gmail.com)
+**Contributors:** Izabela Mamede, Cesar Prada, Diogenes Lima, Helder Nakaya  
+**Maintainer (at the moment):** Izabela Mamede (iza.mamede@gmail.com)
