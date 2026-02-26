@@ -125,6 +125,45 @@ meta_rem <- rem_mv(
 )
 ```
 
+## Estimating variance from test statistics
+
+If your differential expression results do not include confidence interval 
+columns, variance can be approximated from the fold-change and test statistic 
+(e.g. z-score or t-statistic), using the relationship `stat ≈ log2FC / SE`, 
+which gives `var = (log2FC / stat)^2`.
+
+If your data is already organized as a named list of data frames, you can 
+add the variance column as follows:
+```{r variance_estimation}
+# If your tables are already in a list called diffexp_list:
+diffexp_list <- lapply(diffexp_list, function(df) {
+  df %>%
+    mutate(var = ifelse(stat == 0 | is.na(stat), 
+                        NA_real_, 
+                        (log2FC / stat)^2))
+})
+```
+
+Note the `ifelse` guard — transcripts where `stat = 0` would produce 
+infinite variance and cause `rem_mv` to fail, so these are set to `NA` 
+and will be handled gracefully by the model (flagged as `error = TRUE`).
+
+Then pass `vcol = "var"` and `cvar = FALSE` to `rem_mv`:
+```{r rem_mv_no_ci}
+meta_mv <- rem_mv(
+  diffexp = diffexp_list,
+  pcriteria = "pvalue",
+  foldchangecol = "log2FC",
+  genenamecol = "Symbol",
+  geneidcol = "Symbol",
+  llcol = NULL,
+  rlcol = NULL,
+  vcol = "var",
+  cvar = FALSE,
+  ...
+)
+```
+
 ### Preparing reuslts from common DE tools
 
 MetaVolcanoR provides convenient helper functions to prepare results from common DE tools:
