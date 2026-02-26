@@ -70,13 +70,17 @@ rem_mv <- function(diffexp=list(), pcriteria="pvalue", foldchangecol="Log2FC",
 
     # ---- Calculating variance from coifidence interval
     if(cvar == TRUE) {
-        diffexp <- lapply(diffexp, function(...) calc_vi(..., llcol, rlcol))
-    	vcol <- 'vi'
+        diffexp <- lapply(diffexp, function(...) calc_vi(..., llcol=llcol, rlcol=rlcol))
+        vcol <- 'vi'
     } else {
-    	if(is.null(vcol)) {
-	    stop("Oops! If cvar=FALSE, you should provide a variance stimate,
-		  Please, check the vcol parameter.")
-	}
+        if(!is.null(llcol) && !is.null(rlcol)) {
+            diffexp <- lapply(diffexp, function(...) calc_vi(..., llcol=llcol, rlcol=rlcol))
+            vcol <- 'vi'
+        } else {
+            diffexp <- lapply(diffexp, function(...) calc_vi(..., llcol=NULL, rlcol=NULL,
+                                                             vcol=vcol, foldchangecol=foldchangecol))
+            vcol <- 'vi'
+        }
     }
 
 
@@ -96,10 +100,11 @@ rem_mv <- function(diffexp=list(), pcriteria="pvalue", foldchangecol="Log2FC",
         })
 
 	# --- Subsetting the diffexp inputs
-	diffexp <- lapply(diffexp, function(...) dplyr::select(...,
-			  dplyr::matches(paste(c(genenamecol, foldchangecol,
-			                         llcol, rlcol, vcol),
-					       collapse = '|'))))
+        diffexp <- lapply(diffexp, function(...) dplyr::select(...,
+        dplyr::matches(paste(c(geneidcol, foldchangecol,
+                               llcol, rlcol, vcol)[!sapply(c(geneidcol,
+                                                             foldchangecol,
+llcol, rlcol, vcol), is.null)], collapse = "|"))))
 
         # --- merging DEG results
         diffexp <- rename_col(diffexp, genenamecol)
