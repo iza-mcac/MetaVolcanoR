@@ -37,7 +37,6 @@ Imports:
 Suggests:
     knitr,
     testthat, 
-    knitr,
     rmarkdown,
     fgsea,
     msigdbr,
