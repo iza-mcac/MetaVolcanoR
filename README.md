@@ -7,7 +7,7 @@
 
 ## Overview
 
-MetaVolcanoR combines differential gene, transcirpt, methylation and protein expression results from multiple studies to identify consistently perturbed genes. It implements three complementary meta-analysis strategies:
+MetaVolcanoR combines differential gene, transcript, methylation and protein expression results from multiple studies to identify consistently perturbed genes. It implements three complementary meta-analysis strategies:
 
 1. **Random Effects Model (REM)** - Rigorous statistical meta-analysis accounting for study variance
 2. **Vote-counting** - Quick exploration of cross-study DEG consistency  
