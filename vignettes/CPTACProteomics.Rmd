@@ -5,6 +5,8 @@ date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette:
     toc: true
+    fig_width: 10
+    fig_height: 7
 vignette: >
   %\VignetteIndexEntry{MetaVolcanoR for proteomics: a pan-cancer meta-analysis of the CPTAC tumor proteome}
   %\VignetteEngine{knitr::rmarkdown}
@@ -17,9 +19,12 @@ knitr::opts_chunk$set(
   warning = FALSE,
   message = FALSE,
   cache   = TRUE,
-  fig.width  = 8,
-  fig.height = 5
+  fig.width  = 10,
+  fig.height = 7,
+  out.width = "100%",
+  fig.align = "center"
 )
+
 ```
 
 > 📄 [← Back to the main MetaVolcanoR vignette](index.html)
@@ -138,7 +143,7 @@ lapply(diffprot, head, 3)
 
 ## 3. Random Effects Model meta-analysis
 
-```{r rem}
+```{r , fig.width=11, fig.height=8, out.width="100%"}
 mv_rem <- rem_mv(
   diffexp       = diffprot,
   pcriteria     = "pvalue",
@@ -203,14 +208,14 @@ mv_vote <- votecount_mv(
   outputfolder  = tempdir(),
   draw          = "HTML"
 )
-mv_vote@degfreq
+mv_vote@featurefreq
 mv_vote@MetaVolcano
 
-#cowplot::ggsave2("degfreq_metavolc_CPTAC.pdf", height = 5, width = 8)
+#cowplot::ggsave2("featurefreq_metavolc_CPTAC.pdf", height = 5, width = 8)
 #cowplot::ggsave2("votecounts_metavolc_CPTAC.pdf", height = 5, width = 6)
 ```
 
-```{r fisher}
+```{r fisher, fig.width=11, fig.height=8, out.width="100%"}
 mv_fisher <- combining_mv(
   diffexp       = diffprot,
   pcriteria     = "pvalue",

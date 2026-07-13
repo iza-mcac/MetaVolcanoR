@@ -33,7 +33,7 @@ in this update of MetaVolcanoR:
   (`abs(idx)` for vote-counting, `rank` for REM)
 - **Customizable DEG barplot** colors via new `colors` parameter in 
   `draw_degbar()`
-- **`enrichment_mv()`**: new function for gene set enrichment analysis 
+- **`enrichment_mv()`**: new function for feature set enrichment analysis 
   with MSigDB integration and three ranking strategies
 - **Protein-level meta-analysis**: MetaVolcanoR is feature-agnostic and 
   applies directly to differential protein abundance data (mass 
@@ -79,10 +79,10 @@ mv_rem@MetaVolcano
 
 ### REM with labels and pseudogene filtering
 
-When `label_top_n` is used, genes are now ranked by the topconfects 
+When `label_top_n` is used, features are now ranked by the topconfects 
 `rank` metric, which balances effect size and confidence.
 
-```{r rem_labeled}
+```{r rem_labeled, fig.width=11, fig.height=8, out.width="100%"}
 mv_rem_labeled <- rem_mv(
   diffexp       = diffexplist,
   pcriteria     = "pvalue",
@@ -108,7 +108,7 @@ mv_rem_labeled@MetaVolcano
 The `colors` parameter accepts a named vector for the sign consistency
 gradient:
 
-```{r rem_custom_colors}
+```{r rem_custom_colors, fig.width=11, fig.height=8, out.width="100%"}
 mv_rem_custom <- rem_mv(
   diffexp       = diffexplist,
   pcriteria     = "pvalue",
@@ -133,15 +133,15 @@ mv_rem_custom@MetaVolcano
 
 Forest plots now accept custom colors via a named vector:
 
-```{r forest}
-# Top 3 genes by rank
+```{r forest, fig.width=11, fig.height=8, out.width="100%"}
+# Top 3 features by rank
 top3 <- mv_rem@metaresult %>%
   filter(!is.na(randomP)) %>%
   arrange(rank) %>%
   head(3) %>%
   pull(Symbol)
 
-cat("Top 3 genes:", paste(top3, collapse = ", "), "\n")
+cat("Top 3 features:", paste(top3, collapse = ", "), "\n")
 
 # Forest plot with default updated colors
 draw_forest(
@@ -186,7 +186,7 @@ symmetric axis display. Labels are selected using `abs(idx)` — the
 package's own combined metric of frequency and direction consistency
 (`idx = ndeg × ddeg`).
 
-```{r vote}
+```{r vote, fig.width=11, fig.height=8, out.width="100%"}
 mv_vote <- votecount_mv(
   diffexp       = diffexplist,
   pcriteria     = "pvalue",
@@ -210,21 +210,21 @@ mv_vote@MetaVolcano
 ### Label selection criteria
 
 Previous behavior ranked labels by `ndeg` only (number of studies where 
-DE). This could label genes with inconsistent direction across studies.
+DE). This could label features with inconsistent direction across studies.
 
-The updated behavior uses `abs(idx)` and filters out unperturbed genes:
+The updated behavior uses `abs(idx)` and filters out unperturbed features:
 
-| Gene | ndeg | ddeg | idx | Previous rank | Updated rank |
-|------|------|------|-----|---------------|--------------|
-| A    | 5    | 5    | 25  | 1st (tied)    | 1st          |
-| B    | 5    | -5   | -25 | 1st (tied)    | 2nd          |
-| C    | 5    | 1    | 5   | 1st (tied)    | 3rd          |
+| Protein | ndeg | ddeg | idx | Previous rank | Updated rank |
+|---------|------|------|-----|---------------|--------------|
+| A       | 5    | 5    | 25  | 1st (tied)    | 1st          |
+| B       | 5    | -5   | -25 | 1st (tied)    | 2nd          |
+| C       | 5    | 1    | 5   | 1st (tied)    | 3rd          |
 
 ### DEG barplot with custom colors
 
 `draw_degbar()` now accepts a `colors` parameter:
 
-```{r degbar}
+```{r degbar, fig.width=11, fig.height=8, out.width="100%"}
 mv_vote@degfreq
 ```
 
@@ -232,7 +232,7 @@ mv_vote@degfreq
 
 Fisher's combining approach also supports the updated color palette:
 
-```{r fisher}
+```{r fisher, fig.width=11, fig.height=8, out.width="100%"}
 mv_fisher <- combining_mv(
   diffexp       = diffexplist,
   pcriteria     = "pvalue",
@@ -297,7 +297,7 @@ enrich_kegg <- enrichment_mv(
   ranking     = "weighted_fc"
 )
 
-# Hallmark gene sets
+# Hallmark features sets
 enrich_hall <- enrichment_mv(
   mv_rem,
   category = "H"
@@ -328,7 +328,7 @@ enrich <- enrichment_mv(
 enrich$plot
 ```
 
-### Using custom gene sets
+### Using custom features sets
 
 ```{r enrich_manual, eval=FALSE}
 my_pathways <- list(
