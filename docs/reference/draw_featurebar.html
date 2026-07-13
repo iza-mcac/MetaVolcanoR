@@ -18,7 +18,7 @@ studies"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mat
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MetaVolcanoR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
       </span>
     </div>
 
@@ -41,12 +41,9 @@ studies"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mat
     <li>
       <a href="../articles/MetavolcanoUpdateEnrichment.html">MetaVolcanoR: Updated Features and Enrichment Analysis</a>
     </li>
-    <li>
-      <a href="../articles/PrepareDatasets.html">UNKNOWN TITLE</a>
-    </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/iza-mcac/MetaVolcanoR/" class="external-link">
+  <a href="https://github.com/csbl-usp/MetaVolcanoR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
 
   </a>
@@ -61,7 +58,7 @@ studies"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mat
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>A function for feature barplot visualization</h1>
-    <small class="dont-index">Source: <a href="https://github.com/iza-mcac/MetaVolcanoR/blob/HEAD/R/draw_featurebar.R" class="external-link"><code>R/draw_featurebar.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/csbl-usp/MetaVolcanoR/blob/HEAD/R/draw_featurebar.R" class="external-link"><code>R/draw_featurebar.R</code></a></small>
     <div class="hidden name"><code>draw_featurebar.Rd</code></div>
     </div>
 
@@ -95,8 +92,9 @@ studies</p>
 <span class="r-in"><span>           <span class="st">"Log2FC"</span>, <span class="fl">0.05</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">bardat</span> <span class="op">&lt;-</span> <span class="fu"><a href="set_degbar_data.html">set_degbar_data</a></span><span class="op">(</span><span class="va">diffexp</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">gg</span> <span class="op">&lt;-</span> <span class="fu">draw_featurebar</span><span class="op">(</span><span class="va">bardat</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in draw_featurebar(bardat):</span> could not find function "draw_featurebar"</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gg</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="draw_featurebar-1.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'gg' not found</span>
 </code></pre></div>
     </div>
   </div>
@@ -107,7 +105,7 @@ studies</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Cesar Prada, Diogenes Lima, Helder Nakaya.</p>
+  <p></p><p>Developed by Bárbara Marinho, César A. Prada-Medina, Izabela Mamede, Helder I. Nakaya.</p>
 </div>
 
 <div class="pkgdown">

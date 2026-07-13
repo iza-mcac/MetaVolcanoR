@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MetaVolcanoR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
       </span>
     </div>
 
@@ -40,12 +40,9 @@
     <li>
       <a href="../articles/MetavolcanoUpdateEnrichment.html">MetaVolcanoR: Updated Features and Enrichment Analysis</a>
     </li>
-    <li>
-      <a href="../articles/PrepareDatasets.html">UNKNOWN TITLE</a>
-    </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/iza-mcac/MetaVolcanoR/" class="external-link">
+  <a href="https://github.com/csbl-usp/MetaVolcanoR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
 
   </a>
@@ -60,7 +57,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>A function to draw the 'Combining meta-analysis' MetaVolcano</h1>
-    <small class="dont-index">Source: <a href="https://github.com/iza-mcac/MetaVolcanoR/blob/HEAD/R/combining_mv.R" class="external-link"><code>R/combining_mv.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/csbl-usp/MetaVolcanoR/blob/HEAD/R/combining_mv.R" class="external-link"><code>R/combining_mv.R</code></a></small>
     <div class="hidden name"><code>combining_mv.Rd</code></div>
     </div>
 
@@ -69,26 +66,29 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">combining_mv</span><span class="op">(</span></span>
-<span>  diffexp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  pcriteria <span class="op">=</span> <span class="st">"pvalue"</span>,</span>
-<span>  foldchangecol <span class="op">=</span> <span class="st">"Log2FC"</span>,</span>
-<span>  genenamecol <span class="op">=</span> <span class="st">"Symbol"</span>,</span>
-<span>  geneidcol <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  metafc <span class="op">=</span> <span class="st">"Mean"</span>,</span>
-<span>  metathr <span class="op">=</span> <span class="fl">0.01</span>,</span>
-<span>  collaps <span class="op">=</span> <span class="st">"FALSE"</span>,</span>
-<span>  jobname <span class="op">=</span> <span class="st">"MetaVolcano"</span>,</span>
-<span>  outputfolder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  draw <span class="op">=</span> <span class="st">"HTML"</span>,</span>
-<span>  colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#083e46"</span>, <span class="st">"grey"</span>, <span class="st">"#811820"</span><span class="op">)</span>,</span>
-<span>  point_size <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>  label_genes <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  label_top_n <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  label_size <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  plot_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  show_legend <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre><code>combining_mv(
+  diffexp = list(),
+  pcriteria = "pvalue",
+  foldchangecol = "Log2FC",
+  genenamecol = "Symbol",
+  geneidcol = NULL,
+  metafc = "Mean",
+  metathr = 0.01,
+  collaps = "FALSE",
+  jobname = "MetaVolcano",
+  outputfolder = tempdir(),
+  draw = "HTML",
+  colors = c("#083e46", "grey", "#811820"),
+  point_size = 0.5,
+  label_genes = NULL,
+  label_top_n = NULL,
+  label_size = 3,
+  plot_title = NULL,
+  show_legend = FALSE
+  outputfolder = ".",
+  draw = "HTML",
+  render = F
+)</code></pre></div>
     </div>
 
     <div id="arguments">
@@ -171,6 +171,13 @@ c("Mean", "Median") &lt;string&gt;</p></dd>
 
 <dt id="arg-show-legend">show_legend<a class="anchor" aria-label="anchor" href="#arg-show-legend"></a></dt>
 <dd><p>whether to show the legend</p></dd>
+
+<dt id="arg-render">render<a class="anchor" aria-label="anchor" href="#arg-render"></a></dt>
+<dd><p>A boolean parameter that determines whether the plot should be rendered.
+If `TRUE`, the function will produce and save the plot based on the specified `draw`
+parameter (either as an HTML or PDF file). If `FALSE` (default), no plot will be
+rendered or saved. It's useful for cases where you might want to run the function
+for its side effects or calculations without necessarily visualizing the result.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -365,11 +372,11 @@ c("Mean", "Median") &lt;string&gt;</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     super:  &lt;ggproto object: Class Guides, gg&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..@ mapping    : &lt;ggplot2::mapping&gt; List of 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. .. $ x   : language ~metafc</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. ..  ..- attr(*, ".Environment")=&lt;environment: 0x0000013c9aa8d8d0&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. ..  ..- attr(*, ".Environment")=&lt;environment: 0x000001d1e8784ef8&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. .. $ y   : language ~-log10(metap)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. ..  ..- attr(*, ".Environment")=&lt;environment: 0x0000013c9aa8d8d0&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. ..  ..- attr(*, ".Environment")=&lt;environment: 0x000001d1e8784ef8&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. .. $ text: language ~Symbol</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. ..  ..- attr(*, ".Environment")=&lt;environment: 0x0000013c9aa8d8d0&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. ..  ..- attr(*, ".Environment")=&lt;environment: 0x000001d1e8784ef8&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..@ theme      : &lt;theme&gt; List of 144</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. .. $ line                            : &lt;ggplot2::element_line&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. ..  ..@ colour       : chr "black"</span>
@@ -825,8 +832,8 @@ c("Mean", "Median") &lt;string&gt;</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. .. $ y    : chr "-log10(Fisher's(p values))"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. .. $ title: NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..@ meta       : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..@ plot_env   :&lt;environment: 0x0000013c9aa8d8d0&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ featurefreq: &lt;ggplot2::ggplot&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..@ plot_env   :&lt;environment: 0x000001d1e8784ef8&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ degfreq    : &lt;ggplot2::ggplot&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..@ data       : list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  .. .. .. - attr(*, "class")= chr "waiver"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..@ layers     : list()</span>
@@ -972,7 +979,7 @@ c("Mean", "Median") &lt;string&gt;</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     super:  &lt;ggproto object: Class Layout, gg&gt; </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..@ labels     : &lt;ggplot2::labels&gt;  Named list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..@ meta       : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..@ plot_env   :&lt;environment: 0x0000013c9eb9be18&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..@ plot_env   :&lt;environment: 0x000001d1f2ef3fe0&gt; </span>
 </code></pre></div>
     </div>
   </div>
@@ -983,7 +990,7 @@ c("Mean", "Median") &lt;string&gt;</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Cesar Prada, Diogenes Lima, Helder Nakaya.</p>
+  <p></p><p>Developed by Bárbara Marinho, César A. Prada-Medina, Izabela Mamede, Helder I. Nakaya.</p>
 </div>
 
 <div class="pkgdown">

@@ -62,10 +62,15 @@ designed to surface, above and beyond any single cancer type.
 > meta-analyze the resulting effect sizes. This is exactly the situation the
 > Random Effects Model is built for.
 
-## Setup
+### CPTAC vignette (optional)
 
-The proteomics data are pulled from the `cptac` Python package via `reticulate`.
-This requires a one-time Python setup (see the *Data access* note at the end).
+The CPTAC proteomics vignette pulls data from the `cptac` Python package.
+To build it, create the expected environment once:
+
+    reticulate::virtualenv_create("cptac311", version = "3.11")
+    reticulate::virtualenv_install("cptac311", packages = "cptac")
+
+Without it, the vignette's chunks are skipped and the rest of the site still builds.
 
 ```{r packages}
 library(reticulate)

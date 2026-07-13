@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MetaVolcanoR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.2</span>
       </span>
     </div>
 
@@ -57,15 +57,12 @@
     <li>
       <a href="../articles/MetavolcanoUpdateEnrichment.html">MetaVolcanoR: Updated Features and Enrichment Analysis</a>
     </li>
-    <li>
-      <a href="../articles/PrepareDatasets.html">UNKNOWN TITLE</a>
-    </li>
   </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/iza-mcac/MetaVolcanoR/" class="external-link">
+  <a href="https://github.com/csbl-usp/MetaVolcanoR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
 
   </a>
@@ -90,7 +87,7 @@ Bárbara Marinho, Helder I. Nakaya</h4>
             
             <h4 data-toc-skip class="date">2026-07-13</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/iza-mcac/MetaVolcanoR/blob/HEAD/vignettes/CPTACProteomics.Rmd" class="external-link"><code>vignettes/CPTACProteomics.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/csbl-usp/MetaVolcanoR/blob/HEAD/vignettes/CPTACProteomics.Rmd" class="external-link"><code>vignettes/CPTACProteomics.Rmd</code></a></small>
       <div class="hidden name"><code>CPTACProteomics.Rmd</code></div>
 
     </div>
@@ -166,14 +163,16 @@ tumor-vs-normal contrast <strong>within each cohort first</strong> (with
 only then meta-analyze the resulting effect sizes. This is exactly the
 situation the Random Effects Model is built for.</p>
 </blockquote>
-</div>
-<div class="section level2">
-<h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
-</h2>
-<p>The proteomics data are pulled from the <code>cptac</code> Python
-package via <code>reticulate</code>. This requires a one-time Python
-setup (see the <em>Data access</em> note at the end).</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="cptac-vignette-optional">CPTAC vignette (optional)<a class="anchor" aria-label="anchor" href="#cptac-vignette-optional"></a>
+</h3>
+<p>The CPTAC proteomics vignette pulls data from the <code>cptac</code>
+Python package. To build it, create the expected environment once:</p>
+<pre><code><span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/virtualenv-tools.html" class="external-link">virtualenv_create</a></span><span class="op">(</span><span class="st">"cptac311"</span>, version <span class="op">=</span> <span class="st">"3.11"</span><span class="op">)</span></span>
+<span><span class="fu">reticulate</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/virtualenv-tools.html" class="external-link">virtualenv_install</a></span><span class="op">(</span><span class="st">"cptac311"</span>, packages <span class="op">=</span> <span class="st">"cptac"</span><span class="op">)</span></span></code></pre>
+<p>Without it, the vignette’s chunks are skipped and the rest of the
+site still builds.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/reticulate/" class="external-link">reticulate</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioinf.wehi.edu.au/limma/" class="external-link">limma</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/iza-mcac/MetaVolcanoR" class="external-link">MetaVolcanoR</a></span><span class="op">)</span></span>
@@ -184,13 +183,14 @@ setup (see the <em>Data access</em> note at the end).</p>
 <span></span>
 <span><span class="va">cptac</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rstudio.github.io/reticulate/reference/import.html" class="external-link">import</a></span><span class="op">(</span><span class="st">"cptac"</span><span class="op">)</span></span></code></pre></div>
 </div>
+</div>
 <div class="section level2">
 <h2 id="downloading-each-cohorts-proteome">1. Downloading each cohort’s proteome<a class="anchor" aria-label="anchor" href="#downloading-each-cohorts-proteome"></a>
 </h2>
 <p>Each CPTAC cancer is loaded with its own class, and proteomics comes
 from the harmonized <code>umich</code> source. Rows are samples, columns
 are proteins.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">loaders</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  CCRCC <span class="op">=</span> <span class="va">cptac</span><span class="op">$</span><span class="va">Ccrcc</span>,</span>
 <span>  LUAD  <span class="op">=</span> <span class="va">cptac</span><span class="op">$</span><span class="va">Luad</span>,</span>
@@ -217,7 +217,7 @@ use that to define the contrast, then run <code>limma</code> (which
 returns a moderated t-test with confidence intervals — the
 <code>CI.L</code>/<code>CI.R</code> MetaVolcanoR needs for the Random
 Effects Model).</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">de_tumor_vs_normal</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">prot</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">ids</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">prot</span><span class="op">)</span></span>
 <span>  <span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"\\.N$"</span>, <span class="va">ids</span><span class="op">)</span>, <span class="st">"Normal"</span>, <span class="st">"Tumor"</span><span class="op">)</span></span>
@@ -250,7 +250,7 @@ Effects Model).</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">diffprot</span>, <span class="va">nrow</span><span class="op">)</span>         <span class="co"># proteins tested per cohort</span></span></code></pre></div>
 <pre><code><span><span class="co">## CCRCC  LUAD  UCEC </span></span>
 <span><span class="co">##  9027 10328  9783</span></span></code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">diffprot</span>, <span class="va">head</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $CCRCC</span></span>
 <span><span class="co">##    Symbol    Log2FC       pvalue      CI.L      CI.R</span></span>
@@ -273,7 +273,7 @@ Effects Model).</p>
 <div class="section level2">
 <h2 id="random-effects-model-meta-analysis">3. Random Effects Model meta-analysis<a class="anchor" aria-label="anchor" href="#random-effects-model-meta-analysis"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv_rem</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rem_mv.html">rem_mv</a></span><span class="op">(</span></span>
 <span>  diffexp       <span class="op">=</span> <span class="va">diffprot</span>,</span>
 <span>  pcriteria     <span class="op">=</span> <span class="st">"pvalue"</span>,</span>
@@ -317,10 +317,10 @@ Effects Model).</p>
 <span><span class="co">## 4 0.1966351    4</span></span>
 <span><span class="co">## 5 0.1117245    5</span></span>
 <span><span class="co">## 6 0.1364984    6</span></span></code></pre>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv_rem</span><span class="op">@</span><span class="va">MetaVolcano</span></span></code></pre></div>
 <p><img src="CPTACProteomics_files/figure-html/unnamed-chunk-1-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv_rem</span><span class="op">@</span><span class="va">metaresult</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">rank</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Symbol</span>, <span class="va">randomSummary</span>, <span class="va">randomP</span>, <span class="va">signcon</span>, <span class="va">rank</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -346,7 +346,7 @@ Effects Model).</p>
 <span><span class="co">## 18 XPNPEP2     -2.316559  2.884507e-86      -1   18</span></span>
 <span><span class="co">## 19  SLC5A2     -2.373411  6.012485e-63      -1   19</span></span>
 <span><span class="co">## 20   ENPP6     -2.185531 3.695573e-120      -1   20</span></span></code></pre>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#cowplot::ggsave2("REM_metavolc_CPTAC.pdf", height = 5, width = 8)</span></span></code></pre></div>
 <p>The top consensus proteins — consistent across renal, lung, and
 endometrial tumors — are the strongest pan-cancer candidates. A
@@ -355,7 +355,7 @@ protein moved in the same direction in all three cohorts.</p>
 <div class="section level3">
 <h3 id="forest-plot-for-a-top-consensus-protein">Forest plot for a top consensus protein<a class="anchor" aria-label="anchor" href="#forest-plot-for-a-top-consensus-protein"></a>
 </h3>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">top_gene</span> <span class="op">&lt;-</span> <span class="va">mv_rem</span><span class="op">@</span><span class="va">metaresult</span><span class="op">$</span><span class="va">Symbol</span><span class="op">[</span><span class="fl">116</span><span class="op">]</span></span>
 <span><span class="fu"><a href="../reference/draw_forest.html">draw_forest</a></span><span class="op">(</span></span>
 <span>  remres        <span class="op">=</span> <span class="va">mv_rem</span>,</span>
@@ -374,7 +374,7 @@ protein moved in the same direction in all three cohorts.</p>
 <div class="section level2">
 <h2 id="vote-counting-and-fisher-combining">4. Vote-counting and Fisher combining<a class="anchor" aria-label="anchor" href="#vote-counting-and-fisher-combining"></a>
 </h2>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv_vote</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/votecount_mv.html">votecount_mv</a></span><span class="op">(</span></span>
 <span>  diffexp       <span class="op">=</span> <span class="va">diffprot</span>,</span>
 <span>  pcriteria     <span class="op">=</span> <span class="st">"pvalue"</span>,</span>
@@ -392,13 +392,13 @@ protein moved in the same direction in all three cohorts.</p>
 <span><span class="op">)</span></span>
 <span><span class="va">mv_vote</span><span class="op">@</span><span class="va">featurefreq</span></span></code></pre></div>
 <p><img src="CPTACProteomics_files/figure-html/vote-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv_vote</span><span class="op">@</span><span class="va">MetaVolcano</span></span></code></pre></div>
 <p><img src="CPTACProteomics_files/figure-html/vote-2.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#cowplot::ggsave2("featurefreq_metavolc_CPTAC.pdf", height = 5, width = 8)</span></span>
 <span><span class="co">#cowplot::ggsave2("votecounts_metavolc_CPTAC.pdf", height = 5, width = 6)</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mv_fisher</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/combining_mv.html">combining_mv</a></span><span class="op">(</span></span>
 <span>  diffexp       <span class="op">=</span> <span class="va">diffprot</span>,</span>
 <span>  pcriteria     <span class="op">=</span> <span class="st">"pvalue"</span>,</span>
@@ -415,13 +415,13 @@ protein moved in the same direction in all three cohorts.</p>
 <span><span class="op">)</span></span>
 <span><span class="va">mv_fisher</span><span class="op">@</span><span class="va">MetaVolcano</span></span></code></pre></div>
 <p><img src="CPTACProteomics_files/figure-html/fisher-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#cowplot::ggsave2("fisher_metavolc_CPTAC.pdf", height = 5, width = 6)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="functional-enrichment-of-the-consensus-proteins">5. Functional enrichment of the consensus proteins<a class="anchor" aria-label="anchor" href="#functional-enrichment-of-the-consensus-proteins"></a>
 </h2>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Uses enrichment_mv() from the package update (fgsea + msigdbr).</span></span>
 <span><span class="va">enr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/enrichment_mv.html">enrichment_mv</a></span><span class="op">(</span></span>
 <span>  <span class="va">mv_rem</span>,</span>
@@ -448,7 +448,7 @@ required. MetaVolcanoR is free and open source under GPL-3.</p>
 <p>If your network performs SSL inspection and the download fails with a
 certificate error, enabling the system certificate store resolves
 it:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_install.html" class="external-link">py_install</a></span><span class="op">(</span><span class="st">"truststore"</span>, pip <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rstudio.github.io/reticulate/reference/py_run.html" class="external-link">py_run_string</a></span><span class="op">(</span><span class="st">"import truststore; truststore.inject_into_ssl()"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -464,7 +464,7 @@ it:</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Cesar Prada, Diogenes Lima, Helder Nakaya.</p>
+<p>Developed by Bárbara Marinho, César A. Prada-Medina, Izabela Mamede, Helder I. Nakaya.</p>
 </div>
 
 <div class="pkgdown">
