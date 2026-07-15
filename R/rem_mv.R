@@ -64,12 +64,20 @@ rem_mv <- function(diffexp=list(), pcriteria="pvalue", foldchangecol="Log2FC",
                    label_size = 3,
                    plot_title = NULL,
                    show_legend = TRUE,
-                   render = FALSE) {
+                   render = FALSE,
+                   fdr_method = "BH") {
 
     if(!draw %in% c('PDF', 'HTML')) {
 
         stop("Oops! Seems like you did not provide a right 'draw' parameter.
               Try 'PDF' or 'HTML'")
+
+    }
+
+      if(!fdr_method %in% stats::p.adjust.methods) {
+
+        stop("Oops! 'fdr_method' must be one of: ",
+             paste(stats::p.adjust.methods, collapse = ", "))
 
     }
 
@@ -174,6 +182,14 @@ llcol, rlcol, vcol), is.null)], collapse = "|"))))
         dplyr::filter(error != TRUE) # removing genes which REML
                                      # failed to converge
 
+    # --- Multiple-testing correction, applied across all meta-analyzed
+    # --- features that converged. Method is user-selectable (fdr_method);
+    # --- default "BH" (Benjamini-Hochberg) controls the false discovery
+    # --- rate. Use randomP.adjust, not the nominal randomP, for feature
+    # --- selection and downstream functional enrichment.
+    meta_diffexp <- meta_diffexp %>%
+        dplyr::mutate(randomP.adjust = p.adjust(randomP, method = fdr_method))
+
     meta_diffexp <- meta_diffexp %>%
 	dplyr::mutate(se = (randomCi.ub - randomCi.lb)/3.92) %>% # 95% conf.int
         dplyr::mutate(index = seq(nrow(meta_diffexp)))
@@ -188,10 +204,11 @@ llcol, rlcol, vcol), is.null)], collapse = "|"))))
 			  by = 'index', all = TRUE)
 
     # --- Keep all genes for the results report
-    if(nrow(meta_diffexp_err) != 0) {
+     if(nrow(meta_diffexp_err) != 0) {
         meta_diffexp_err  <- meta_diffexp_err %>%
             dplyr::mutate(se=NA,
 	                  index=NA,
+	                  randomP.adjust=NA,
 		          `rank`=seq(nrow(meta_diffexp_err))+nrow(meta_diffexp))
 
         meta_diffexp  <- rbind(meta_diffexp, meta_diffexp_err)
