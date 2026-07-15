@@ -56,7 +56,8 @@ combining_mv <- function(diffexp=list(), pcriteria="pvalue",
                          label_size = 3,
                          plot_title = NULL,
                          show_legend = FALSE,
-                         render = FALSE) {
+                         render = FALSE,
+                         fdr_method = "BH") {
     	
     if(!draw %in% c('PDF', 'HTML')) {
 		
@@ -67,6 +68,11 @@ combining_mv <- function(diffexp=list(), pcriteria="pvalue",
 
 	    stop("Oops! Please check the provided metafc parameter. Try either
 		 Mean or Median")
+
+    } else if(!fdr_method %in% stats::p.adjust.methods) {
+
+	    stop("Oops! 'fdr_method' must be one of: ",
+	         paste(stats::p.adjust.methods, collapse = ", "))
     }
 
     if (collaps) {
@@ -139,10 +145,17 @@ combining_mv <- function(diffexp=list(), pcriteria="pvalue",
 	    dplyr::summarize('metap' = tryCatch({ 
 	        metap::sumlog(value)$p},
 		    error = function(e){ return(NA) })) %>%
-	    dplyr::filter(!is.na(metap)) -> meta_p
+	        dplyr::filter(!is.na(metap)) -> meta_p
 
     
     meta_diffexp <- merge(meta_diffexp, meta_p, by = genecol)    
+
+    # --- Multiple-testing correction, applied across all meta-analyzed
+    # --- features. Method is user-selectable (fdr_method); default "BH"
+    # --- (Benjamini-Hochberg) controls the false discovery rate. Use
+    # --- metap.adjust, not the nominal metap, for feature selection.
+    meta_diffexp <- meta_diffexp %>%
+        dplyr::mutate(metap.adjust = p.adjust(metap, method = fdr_method))
 
     # --- Combining fold-change by either mean or median summary methods
     dplyr::select(meta_diffexp, 
