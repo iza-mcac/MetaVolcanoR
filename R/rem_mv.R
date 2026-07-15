@@ -53,22 +53,18 @@ NULL
 #'     dplyr::filter(del, grepl("MP", Symbol))
 #' })
 rem_mv <- function(diffexp=list(), pcriteria="pvalue", foldchangecol="Log2FC",
-		   genenamecol="Symbol", geneidcol=NULL, collaps=FALSE,
-		   llcol="CI.L", rlcol="CI.R", vcol=NULL, cvar=TRUE,
-		   metathr=0.01, jobname="MetaVolcano", outputfolder = tempdir(),
-		   draw='HTML', ncores=1,
-		   colors = c(low = "#083e46", mid = "white", high = "#811820", na = "grey80"),
-		   point_size = 0.6,
-		   label_genes = NULL,
-		   label_top_n = NULL,
-		   label_size = 3,
-		   plot_title = NULL,
-		   show_legend = TRUE) {
-
-		   genenamecol="Symbol", geneidcol=NULL, collaps=FALSE, 
-		   llcol="CI.L", rlcol="CI.R", vcol=NULL, cvar=TRUE, 
-		   metathr=0.01, jobname="MetaVolcano", outputfolder=".", 
-		   draw='HTML', ncores=1, render = F) {
+                   genenamecol="Symbol", geneidcol=NULL, collaps=FALSE,
+                   llcol="CI.L", rlcol="CI.R", vcol=NULL, cvar=TRUE,
+                   metathr=0.01, jobname="MetaVolcano", outputfolder = tempdir(),
+                   draw='HTML', ncores=1,
+                   colors = c(low = "#083e46", mid = "white", high = "#811820", na = "grey80"),
+                   point_size = 0.6,
+                   label_genes = NULL,
+                   label_top_n = NULL,
+                   label_size = 3,
+                   plot_title = NULL,
+                   show_legend = TRUE,
+                   render = FALSE) {
 
     if(!draw %in% c('PDF', 'HTML')) {
 
@@ -214,44 +210,26 @@ llcol, rlcol, vcol), is.null)], collapse = "|"))))
                       label_size = label_size, plot_title = plot_title,
                       show_legend = show_legend)
 
-    if(draw == "HTML") {
-
-        # --- Writing html device for offline visualization
-        saveWidget(as_widget(ggplotly(gg)),
-            paste0(normalizePath(outputfolder),
-	           "/RandomEffectModel_MetaVolcano_",
-	           jobname, ".html"))
-
-   } else if(draw == "PDF") {
-
-        # --- Writing PDF visualization
-	pdf(paste0(normalizePath(outputfolder),
-	           "/RandomEffectModel_MetaVolcano_", jobname,
-	           ".pdf"), width = 7, height = 6)
-	     plot(gg)
-	dev.off()
-
     if(render) {
-      
-      if(draw == "HTML") {
-        
-        # --- Writing html device for offline visualization
-        saveWidget(as_widget(ggplotly(gg)), 
-                   paste0(normalizePath(outputfolder), 
-                          "/RandomEffectModel_MetaVolcano_", 
-                          jobname, ".html"))
-        
-      } else if(draw == "PDF") {
-        
-        # --- Writing PDF visualization
-        pdf(paste0(normalizePath(outputfolder),
-                   "/RandomEffectModel_MetaVolcano_", jobname,
-                   ".pdf"), width = 7, height = 6)
-        plot(gg)
-        dev.off()
-        
-      }
-      
+
+        if(draw == "HTML") {
+
+            # --- Writing html device for offline visualization
+            saveWidget(as_widget(ggplotly(gg)),
+                paste0(normalizePath(outputfolder),
+                       "/RandomEffectModel_MetaVolcano_",
+                       jobname, ".html"))
+
+        } else if(draw == "PDF") {
+
+            # --- Writing PDF visualization
+            pdf(paste0(normalizePath(outputfolder),
+                       "/RandomEffectModel_MetaVolcano_", jobname,
+                       ".pdf"), width = 7, height = 6)
+            plot(gg)
+            dev.off()
+
+        }
     }
 
     # Set REM result
