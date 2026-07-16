@@ -192,7 +192,7 @@ llcol, rlcol, vcol), is.null)], collapse = "|"))))
 
     meta_diffexp <- meta_diffexp %>%
 	dplyr::mutate(se = (randomCi.ub - randomCi.lb)/3.92) %>% # 95% conf.int
-        dplyr::mutate(index = seq(nrow(meta_diffexp)))
+        dplyr::mutate(index = seq_len(nrow(meta_diffexp)))
 
     confects <- normal_confects(meta_diffexp$randomSummary,
 				se=meta_diffexp$se,
@@ -209,7 +209,7 @@ llcol, rlcol, vcol), is.null)], collapse = "|"))))
             dplyr::mutate(se=NA,
 	                  index=NA,
 	                  randomP.adjust=NA,
-		          `rank`=seq(nrow(meta_diffexp_err))+nrow(meta_diffexp))
+		          `rank`=seq_len(nrow(meta_diffexp_err))+nrow(meta_diffexp))
 
         meta_diffexp  <- rbind(meta_diffexp, meta_diffexp_err)
     }
